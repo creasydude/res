@@ -28,7 +28,7 @@ const userSchema = Schema({
     },
     password: {
         type: String,
-        minLength: 6,
+        minLength: 8,
         maxLength: 1024,
     },
     todos: {
