@@ -1,6 +1,6 @@
 import mailVerifySchema from "../dbSchemas/mailVerify.js";
 
-const makeVerifyLink = async (req, res, data) => {
+const makeVerifyLink = async (req,data) => {
     //Declare Variables
     const email = data.email;
     const code = Math.floor(Math.random() * 10000000);
@@ -15,7 +15,8 @@ const makeVerifyLink = async (req, res, data) => {
         throw err
     }
     //Make Link
-    const Link = `${req.protocol}://${req.hostname}${req.originalUrl}${email}/${code}`
+    // const Link = `${req.protocol}://${req.hostname}${req.originalUrl}${email}/${code}`
+    const Link = `${req.protocol}://${req.hostname}/api/auth/verifyEmail/${email}/${code}`
     //Implant Email Send Logic,
     console.log(Link)
 
