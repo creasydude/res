@@ -13,7 +13,7 @@ const todoSchema = Schema({
         required: true,
         minLength: 1,
         maxLength: 8024
-    }
+    },
     isChecked: {
         type: Boolean,
         default: false,
@@ -34,7 +34,7 @@ const userSchema = Schema({
     todos: {
         type: [todoSchema],
         required: false,
-    }
+    },
     rt: {
         type: String,
         default: null,
