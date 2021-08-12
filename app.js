@@ -18,8 +18,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 //Routes
-app.use("/api/auth/" registerRoute);
-app.use("/api/auth/" loginRoute);
+app.use("/api/auth/", registerRoute);
+app.use("/api/auth/", loginRoute);
 
 //Mongodb Setup And Listen
 try {
