@@ -3,6 +3,7 @@ import userSchema from '../dbSchemas/user.js';
 import joiValidate from '../utils/joiVerification.js';
 import mailVerifySchema from "../dbSchemas/mailVerify.js";
 import makeVerifyLink from '../utils/makeVerifyLink.js';
+import bcrypt from 'bcrypt';
 const Router = express.Router();
 
 Router.post('/register', async (req, res) => {
@@ -14,10 +15,13 @@ Router.post('/register', async (req, res) => {
     //Validate the email and password
     const { error } = joiValidate(email, password)
     if (error) return res.status(400).json({ message: error.details[0].message });
+    //bcrypt the password
+    const salt = await bcrypt.genSalt(10);
+    const hashPw = await bcrypt.hash(password, salt);
     //Write email and password to the db
     const newUser = new userSchema({
         email: email,
-        password: password,
+        password: hashPw,
     });
     //Saving to the db
     try {
