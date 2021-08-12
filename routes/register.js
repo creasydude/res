@@ -51,4 +51,16 @@ Router.post('/verifyEmail/:email/:code', async (req, res) => {
     }
 })
 
+Router.post('/verifyMail', async (req, res) => {
+    //Get Specs from req body
+    const { email } = req.body;
+    //Make Mail Verification Logic
+    try {
+        const verifyMail = await makeVerifyLink(req, email);
+        res.status(201).json({ message: "Verify Link Sent!" })
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+})
+
 export default Router;
