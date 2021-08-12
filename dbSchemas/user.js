@@ -31,6 +31,10 @@ const userSchema = Schema({
         minLength: 8,
         maxLength: 1024,
     },
+    status: {
+        type: String,
+        default: "pending",
+    },
     todos: {
         type: [todoSchema],
         required: false,
