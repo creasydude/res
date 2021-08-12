@@ -11,7 +11,7 @@ Router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         //Checking specs from db
-        const getSpec = userSchema.findOne({ email: email });
+        const getSpec = await userSchema.findOne({ email: email });
         if (!getSpec) return res.status(404).json({ message: "No User Found!" });
         //If user not verified
         if (getSpec?.status === "pending") return res.status(401).json({ message: "Your Account Not Verified!" })
