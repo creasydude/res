@@ -1,7 +1,6 @@
 import express from 'express';
 import userSchema from '../dbSchemas/user.js';
 import joiValidate from '../utils/joiVerification.js';
-import { makeAccessToken, makeRefreshToken } from '../utils/jwtSign.js';
 import mailVerifySchema from "../dbSchemas/mailVerify.js";
 import makeVerifyLink from '../utils/makeVerifyLink.js';
 const Router = express.Router();
