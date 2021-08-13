@@ -6,6 +6,8 @@ import { Route, Switch } from 'react-router-dom';
 //Import Components
 import Footer from "./Footer";
 import Header from "./Header";
+import Login from "./Login";
+import Register from "./Register";
 
 
 // Theme Light/Dark Mode Section
@@ -50,6 +52,14 @@ function App() {
   return (
     <ThemeProvider theme={themes[theme]}>
      <Header thememode={theme} themeHandler={themeHandler} />
+     <Switch>
+       <Route exact path="/login">
+         <Login />
+       </Route>
+       <Route exact path="/register">
+         <Register />
+       </Route>
+     </Switch>
       <Footer />
     </ThemeProvider>
   );
