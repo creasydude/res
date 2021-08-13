@@ -8,7 +8,7 @@ function Header({ thememode, themeHandler }) {
             <span><Linkx to="/login" >Login</Linkx> / <Linkx to="/register">Register</Linkx></span>
             <BtnContainer>
                 <Switch>
-                    <BtnInput onClick={themeHandler} checked={thememode === "light" ? false : true} type="checkbox" />
+                    <BtnInput readOnly onClick={themeHandler} checked={thememode === "light" ? false : true} type="checkbox" />
                     <SliderRound />
                 </Switch>
             </BtnContainer>
