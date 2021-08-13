@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 //Import Routes
 import registerRoute from './routes/register.js';
@@ -18,14 +19,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.CPSEC));
 
 //Cors
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    if (req.method === "OPTIONS") {
-        res.header("Access-Control-Allow-Methods", "PUT , POST , PATCH , DELETE , GET");
-        return res.status(200)
-    }
-})
+app.use(cors({
+    origin: '*'
+}));
 
 //Routes
 app.use("/api/auth/", registerRoute);
