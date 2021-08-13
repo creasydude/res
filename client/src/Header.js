@@ -1,9 +1,11 @@
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 
 function Header({ thememode, themeHandler }) {
     return (
         <Container>
             <span>NOTE APP</span>
+            <span><Linkx to="/login" >Login</Linkx> / <Linkx to="/register">Register</Linkx></span>
             <BtnContainer>
                 <Switch>
                     <BtnInput onClick={themeHandler} checked={thememode === "light" ? false : true} type="checkbox" />
@@ -83,4 +85,9 @@ const BtnInput = styled.input`
     -ms-transform: translateX(26px);
     transform: translateX(26px);
     }
+`;
+
+const Linkx = styled(NavLink)`
+    text-decoration: none;
+    color: ${props => props.theme.hfbColor};
 `;
