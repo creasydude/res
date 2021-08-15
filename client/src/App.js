@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import Storage from 'local-storage-fallback';
 import { Route, Switch } from 'react-router-dom';
 import axios from "axios";
-import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 //Import Components
 import ErrorBoundary from "./utils/ErrorBoundary";
+import VerifyMail from "./utils/VerifyMail";
 import Footer from "./Footer";
 import Header from "./Header";
 import Login from "./Login";
@@ -75,7 +75,7 @@ function App() {
 
   return (
     <ThemeProvider theme={themes[theme]}>
-      <Header thememode={theme} themeHandler={themeHandler} />
+      <Header token={token} thememode={theme} themeHandler={themeHandler} />
       <ErrorBoundary>
         <Switch>
           <Route exact path="/">
@@ -86,6 +86,9 @@ function App() {
           </Route>
           <Route exact path="/register">
             <Register />
+          </Route>
+          <Route exact path="/verifyMail/:email/:code">
+            <VerifyMail />
           </Route>
         </Switch>
       </ErrorBoundary>
