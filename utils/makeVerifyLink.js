@@ -16,7 +16,7 @@ const makeVerifyLink = async (req,data) => {
     }
     //Make Link
     // const Link = `${req.protocol}://${req.hostname}${req.originalUrl}${email}/${code}`
-    const Link = `${req.protocol}://${req.hostname}/api/auth/verifyEmail/${email}/${code}`
+    const Link = `${process.env.FRONTEND_SITE}/verifyEmail/${email}/${code}`
     //Implant Email Send Logic,
     console.log(Link)
 
