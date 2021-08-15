@@ -35,9 +35,9 @@ Router.post('/register', async (req, res) => {
 
 })
 
-Router.post('/verifyEmail/:email/:code', async (req, res) => {
+Router.post('/verifyEmail', async (req, res) => {
     //Get info from params
-    const { email, code } = req.params;
+    const { email, code } = req.body;
     //Check If Mail And Code Is Right
     const checkSpecs = await mailVerifySchema.findOne({ email: email });
     if (!checkSpecs) return res.status(400).json({ message: "Invalid Email!" });
@@ -48,18 +48,6 @@ Router.post('/verifyEmail/:email/:code', async (req, res) => {
         res.status(201).json({ message: "You Account Verified Successfuly!You Can Now Login!" });
     } catch (err) {
         return res.status(400).json({ message: err.message });
-    }
-})
-
-Router.post('/verifyMail', async (req, res) => {
-    //Get Specs from req body
-    const { email } = req.body;
-    //Make Mail Verification Logic
-    try {
-        const verifyMail = await makeVerifyLink(req, email);
-        res.status(201).json({ message: "Verify Link Sent!" })
-    } catch (err) {
-        res.status(400).json({ message: err.message })
     }
 })
 
