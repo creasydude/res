@@ -61,26 +61,6 @@ function App() {
     return config;
   }, (error) => Promise.reject(error))
 
-
-  // const refreshToken = async () => {
-  //   try {
-  //     const { data } = await axios({
-  //       method: "POST",
-  //       url: "/api/auth/refreshToken",
-  //     });
-  //     return data.accessToken;
-  //   } catch (err) {
-  //     return false;
-  //   }
-  // }
-  // axios.interceptors.request.use(async (config) => {
-  //   const accessToken = await refreshToken();
-  //   if (accessToken) {
-  //     config.headers["x-access-token"] = accessToken;
-  //   }
-  //   return config;
-  // }, (error) => Promise.reject(error))
-
   const initialTheme = () => {
     const savedTheme = Storage.getItem('theme-mode');
     return savedTheme ? savedTheme : 'light';
