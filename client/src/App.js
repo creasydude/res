@@ -2,12 +2,16 @@ import styled, { ThemeProvider } from "styled-components";
 import { useEffect, useState } from "react";
 import Storage from 'local-storage-fallback';
 import { Route, Switch } from 'react-router-dom';
+import axios from "axios";
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 //Import Components
+import ErrorBoundary from "./utils/ErrorBoundary";
 import Footer from "./Footer";
 import Header from "./Header";
 import Login from "./Login";
 import Register from "./Register";
+import Todo from "./Todo";
 
 
 // Theme Light/Dark Mode Section
@@ -19,7 +23,7 @@ const darkColors = {
   borderForNote: "#FFD369",
   bgForNote: "#e8e9ea",
   btnSubmit: "#64686e",
-  
+
 };
 const lightColors = {
   bgColor: "#FCEFEE",
@@ -29,7 +33,7 @@ const lightColors = {
   borderForNote: "#FC5C9C",
   bgForNote: "#fff",
   btnSubmit: "#fc8cb9",
-  
+
 };
 const themes = {
   light: lightColors,
@@ -37,6 +41,46 @@ const themes = {
 };
 
 function App() {
+  const [token, setToken] = useState();
+  useEffect(async () => {
+    try {
+      const res = await axios({
+        method: "POST",
+        url: "/api/auth/refreshToken",
+      });
+      return setToken(res?.data?.accessToken);
+    } catch (err) {
+      return setToken(null);
+    }
+
+  })
+  axios.interceptors.request.use(async (config) => {
+    if (token) {
+      config.headers["x-access-token"] = token;
+    }
+    return config;
+  }, (error) => Promise.reject(error))
+
+
+  // const refreshToken = async () => {
+  //   try {
+  //     const { data } = await axios({
+  //       method: "POST",
+  //       url: "/api/auth/refreshToken",
+  //     });
+  //     return data.accessToken;
+  //   } catch (err) {
+  //     return false;
+  //   }
+  // }
+  // axios.interceptors.request.use(async (config) => {
+  //   const accessToken = await refreshToken();
+  //   if (accessToken) {
+  //     config.headers["x-access-token"] = accessToken;
+  //   }
+  //   return config;
+  // }, (error) => Promise.reject(error))
+
   const initialTheme = () => {
     const savedTheme = Storage.getItem('theme-mode');
     return savedTheme ? savedTheme : 'light';
@@ -51,15 +95,20 @@ function App() {
 
   return (
     <ThemeProvider theme={themes[theme]}>
-     <Header thememode={theme} themeHandler={themeHandler} />
-     <Switch>
-       <Route exact path="/login">
-         <Login />
-       </Route>
-       <Route exact path="/register">
-         <Register />
-       </Route>
-     </Switch>
+      <Header thememode={theme} themeHandler={themeHandler} />
+      <ErrorBoundary>
+        <Switch>
+          <Route exact path="/">
+            <Todo />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/register">
+            <Register />
+          </Route>
+        </Switch>
+      </ErrorBoundary>
       <Footer />
     </ThemeProvider>
   );
