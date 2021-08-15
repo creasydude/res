@@ -3,6 +3,7 @@ import userSchema from '../dbSchemas/user.js';
 import { makeAccessToken, makeRefreshToken } from '../utils/jwtSign.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import authUser from '../utils/authUser.js';
 const Router = express.Router();
 
 
@@ -13,11 +14,11 @@ Router.post('/login', async (req, res) => {
         //Checking specs from db
         const getSpec = await userSchema.findOne({ email: email });
         if (!getSpec) return res.status(404).json({ message: "No User Found!" });
-        //If user not verified
-        if (getSpec?.status === "pending") return res.status(401).json({ message: "Your Account Not Verified!" })
         //Compare Hashed Pw
         const comparedPw = await bcrypt.compare(password, getSpec?.password);
         if (!comparedPw) return res.status(401).json({ message: "Your Password is wrong!" });
+        //If user not verified
+        if (getSpec?.status === "pending") return res.status(403).json({ message: "Your Account Not Verified!" })
         //Make access and refresh token
         const accessToken = makeAccessToken(getSpec);
         const refreshToken = makeRefreshToken(getSpec);
@@ -71,6 +72,32 @@ Router.post('/refreshToken', async (req, res) => {
         return res.status(400).json({ message: err.message })
     }
 
+})
+
+Router.post('/isAuth', authUser, async (req, res) => {
+    //Get User From authUser Function
+    const user = req.user;
+    //Send Info Of User
+    try {
+        const getInfoFromDb = await userSchema.findOne({ _id: user._id });
+        res.status(200).json(getInfoFromDb)
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+    }
+})
+
+Router.delete('/logout', authUser, async (req, res) => {
+    //Get User From authUser Function
+    const user = req.user;
+    //Clear refresh token from cookie
+    res.clearCookie('rt')
+    //Clear refresh token from db
+    try {
+        const deleteFromDb = await userSchema.updateOne({ _id: user._id } , {rt : null})
+        res.status(200).json({message : "Logged Out Successfuly!"})
+    } catch (err) {
+        res.status(400).json({message : err.message})
+    }
 })
 
 export default Router;

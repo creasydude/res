@@ -1,11 +1,59 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import axios from "axios";
+import LoadingBar from 'react-top-loading-bar';
 
-function Header({ thememode, themeHandler }) {
+function Header({ thememode, themeHandler, token }) {
+    const history = useHistory();
+    const [progress, setProgress] = useState(0)
+    const [userInfo, setUserInfo] = useState();
+    const [isAuth, setIsAuth] = useState(false);
+    useEffect(async () => {
+        try {
+            const { data } = await axios({
+                method: "POST",
+                url: "/api/auth/isAuth",
+            })
+            setIsAuth(true);
+            setUserInfo(data);
+        } catch (err) {
+            setIsAuth(false);
+        }
+    }, [token])
+
+    const logoutHandler = async () => {
+        setProgress(30)
+        try {
+            const res = axios({
+                method: "DELETE",
+                url: "/api/auth/logout"
+            })
+            setProgress(100)
+            history.push('/');
+            window.location.reload()
+        }catch (err) {
+            setProgress(100)
+            return err
+        }
+
+    }
+
+    const userAuth = (
+        <>
+            <p>Welcome {userInfo?.email} <Logout onClick={logoutHandler} to="#">Logout</Logout></p>
+        </>
+    );
+    const userNotAuth = (
+        <>
+            <Linkx to="/login" >Login</Linkx> / <Linkx to="/register">Register</Linkx>
+        </>
+    );
     return (
         <Container>
+            <LoadingBar color="#FFD369" progress={progress} onLoaderFinished={() => setProgress(0)} />
             <span><Linkx to="/">NOTE APP</Linkx></span>
-            <span><Linkx to="/login" >Login</Linkx> / <Linkx to="/register">Register</Linkx></span>
+            <span>{isAuth ? userAuth : userNotAuth}</span>
             <BtnContainer>
                 <Switch>
                     <BtnInput readOnly onClick={themeHandler} checked={thememode === "light" ? false : true} type="checkbox" />
@@ -89,5 +137,11 @@ const BtnInput = styled.input`
 
 const Linkx = styled(NavLink)`
     text-decoration: none;
+    color: ${props => props.theme.hfbColor};
+`;
+
+const Logout = styled.a`
+    text-decoration: none;
+    cursor: pointer;
     color: ${props => props.theme.hfbColor};
 `;
