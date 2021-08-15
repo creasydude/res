@@ -53,6 +53,7 @@ function Login() {
                 })
                 setProgress(100)
                 history.push('/')
+                window.location.reload();
             } catch (error) {
                 setProgress(100)
                 if (error) {
