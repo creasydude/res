@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 function Header({ thememode, themeHandler }) {
     return (
         <Container>
-            <span>NOTE APP</span>
+            <span><Linkx to="/">NOTE APP</Linkx></span>
             <span><Linkx to="/login" >Login</Linkx> / <Linkx to="/register">Register</Linkx></span>
             <BtnContainer>
                 <Switch>
