@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
 import LoadingBar from 'react-top-loading-bar';
@@ -24,9 +24,6 @@ function Register() {
             setEmailMsg("✓");
         } else {
             setEmailMsg("Please Enter The Valid Email!");
-            // setTimeout(() => {
-            //     setEmailMsg('');
-            // }, 3000);
         }
     }
     const passwordValidator = (e) => {
@@ -38,10 +35,6 @@ function Register() {
             setPwMsg("✓");
         } else {
             setPwMsg("Your Password Should Be 8 characters and Contain 1 Lower , 1 Upper , 1 Number At least.");
-            // setTimeout(() => {
-            //     setPwMsg('');
-            // }, 3000);
-
         }
     }
 
