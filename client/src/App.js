@@ -79,7 +79,7 @@ function App() {
       <ErrorBoundary>
         <Switch>
           <Route exact path="/">
-            <Todo />
+            <Todo token={token} />
           </Route>
           <Route exact path="/login">
             <Login />
