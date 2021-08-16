@@ -36,7 +36,7 @@ Router.post("/addTodo", authUser, async (req, res) => {
     }
 });
 
-Router.post("/checkTodo", authUser, async (req, res) => {
+Router.put("/checkTodo", authUser, async (req, res) => {
     //Get Specs from body
     const { objId, isChecked } = req.body;
     //Update Is Checked From The Db
@@ -51,5 +51,24 @@ Router.post("/checkTodo", authUser, async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 });
+
+Router.delete('/deleteTodo' , async (req,res) => {
+        //Get Specs from body
+        const { objId } = req.body;
+        //Delete Todo From The Db
+        try {
+            const deleteTodo = await userSchema.updateOne({ "todos._id": objId }, {
+                $pull: {
+                    todos: {
+                        _id : objId
+                    } 
+                }
+            });
+            res.status(200).json({ message: "Deleted The Todo!" });
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
+})
+
 
 export default Router;
